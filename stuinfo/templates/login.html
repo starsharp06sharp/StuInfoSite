@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>登录</title>
+    <style></style>
+</head>
+<body>
+    <div class="page">
+        <h2>请登录</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <div class="login-box">
+            <form id="login-form" action="{{ url_for('login') }}" method="POST">
+                用户名：<input type="text" name="username" /><br />
+                密码：<input type="password" id="input-password" /><br />
+                <input type="hidden" id="md5-password" name="password" />
+                <input type="submit" value="登录" />
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='checkform.js') }}"></script>
+</body>
+</html>

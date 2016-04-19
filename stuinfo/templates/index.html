@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
-<table class="students" border="1">
+<div class="table-responsive">
+<table class="table table-hover">
     <thead>
     <tr>
         <th>学号</th>
@@ -8,7 +9,7 @@
         <th>性别</th>
         <th>电话</th>
         <th>Email</th>
-        <th></th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -19,7 +20,7 @@
         <td>{{ student['gender'] }}</td>
         <td>{{ student['phonenum'] }}</td>
         <td>{{ student['emailaddr'] }}</td>
-        <td><a href="{{ url_for('delete_student', student_id=student['id']) }}">删除</a></td>
+        <td><a href="{{ url_for('delete_student', student_id=student['id']) }}" class="btn btn-danger btn-sm">删除</a></td>
     </tr>
     {% endfor %}
     <tr>
@@ -27,14 +28,15 @@
             <td><input type="text" name="id" /></td>
             <td><input type="text" name="name" /></td>
             <td>
-                <label><input type="radio" name="gender" value="男" />男</label>
-                <label><input type="radio" name="gender" value="女" />女</label>
+                <label class="radio-inline"><input type="radio" name="gender" value="男" />男</label>
+                <label class="radio-inline"><input type="radio" name="gender" value="女" />女</label>
             </td>
             <td><input type="text" name="phonenum" /></td>
             <td><input type="text" name="emailaddr" /></td>
-            <td><input type="submit" value="添加" /></td>
+            <td><input type="submit" value="添加" class="btn btn-primary btn-sm" /></td>
         </form>
     </tr>
     </tbody>
 </table>
+</div>
 {% endblock %}

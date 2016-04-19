@@ -7,18 +7,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/3.3.5/css/bootstrap.min.css') }}">
     <script src="{{ url_for('static', filename='jquery/2.2.3/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/3.3.5/js/bootstrap.min.js') }}"></script>
-    <style></style>
+    <style>
+        body {padding-top: 70px;}
+    </style>
 </head>
 <body>
-    <div class="page">
-        <div class="navbar">
-            <h2>学生信息管理</h2>
-            <a href="{{ url_for('logout') }}">退出</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">学生信息管理</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ url_for('logout') }}">退出</a></li>
+            </ul>
         </div>
-        {% for message in get_flashed_messages() %}
-        <div class="message">{{ message }}</div>
-        {% endfor %}
+    </nav>
+    <div class="visible-xs-block" style="height:70px"></div>
+    {% for message in get_flashed_messages() %}
+    <div class="container-fluid">
+        <div class="alert alert-success">
+            <span class="glyphicon glyphicon-ok"></span>
+            {{ message }}
+            <button type="button" class="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- TODO: 为关闭按钮添加功能 -->
+        </div>
+    </div>
+    {% endfor %}
+    <div class="container-fluid">
+        <div class="row"><div class="col-xs-12 col-md-10 col-md-offset-1">
         {% block body%}{% endblock %}
+        </div></div>
     </div>
 </body>
 </html>

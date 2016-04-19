@@ -10,18 +10,42 @@
     <style></style>
 </head>
 <body>
-    <div class="page">
-        <h2>请登录</h2>
-        {% if error %}<div class="error">{{ error }}</div>{% endif %}
-        <div class="login-box">
-            <form id="login-form" action="{{ url_for('login') }}" method="POST">
-                用户名：<input type="text" name="username" /><br />
-                密码：<input type="password" id="input-password" /><br />
-                <input type="hidden" id="md5-password" name="password" />
-                <input type="submit" value="登录" />
-            </form>
-        </div>
+    <div class="container">
+        <div class="row"><div class="col-xs-12 col-md-4 col-md-offset-4">
+            <div class="text-center"><h2>请登录</h2></div>
+            
+            {% if error %}
+            <div class="alert alert-danger">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <div class="login-box">
+                <form id="login-form" action="{{ url_for('login') }}" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="col-xs-3 col-md-3 control-label">用户名：</label>
+                        <div class="col-xs-9 col-md-9">
+                            <input type="text" id="username" name="username" class="form-control" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-password" class="col-xs-3 col-md-3 control-label">密码：</label>
+                        <div class="col-xs-9 col-md-9">
+                            <input type="password" id="input-password" class="form-control" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="text-center">
+                        <input type="hidden" id="md5-password" name="password" />
+                        <input type="submit" value="登录" class="btn btn-primary" />
+                        <input type="reset" value="清除" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div></div>
     </div>
-    <script src="{{ url_for('static', filename='checkform.js') }}"></script>
 </body>
+<script src="{{ url_for('static', filename='checkform.js') }}"></script>
 </html>

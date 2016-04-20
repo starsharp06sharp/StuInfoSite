@@ -1,12 +1,10 @@
+/// <reference path="jquery.d.ts" />
+
 (function () {
-    var loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', gen_md5password);
-    function gen_md5password(e) {
-        var inputPassword = document.getElementById('input-password');
-        var md5Password = document.getElementById('md5-password');
-        md5Password.value = hex_md5(inputPassword.value);
+    $('#login-form').submit(function (e) {
+        $('#md5-password').val(hex_md5($('#input-password').val()));
         return true;
-    }
+    });
 
     var hexcase = 0;
     var b64pad = "";

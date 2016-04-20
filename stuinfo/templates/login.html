@@ -7,21 +7,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/3.3.5/css/bootstrap.min.css') }}">
     <script src="{{ url_for('static', filename='jquery/2.2.3/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/3.3.5/js/bootstrap.min.js') }}"></script>
-    <style></style>
+    <style>
+        .login-box {
+            background-color: lightgray;
+            margin-top: 100px;
+            padding: 1px 0 20px 0;
+            border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="row"><div class="col-xs-12 col-md-4 col-md-offset-4">
-            <div class="text-center"><h2>请登录</h2></div>
-            
-            {% if error %}
-            <div class="alert alert-danger">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                {{ error }}
-            </div>
-            {% endif %}
-
             <div class="login-box">
+                <div class="text-center"><h2>请登录</h2></div>
+                
+                {% if error %}
+                <div class="alert alert-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{ error }}
+                </div>
+                {% endif %}
+
                 <form id="login-form" action="{{ url_for('login') }}" method="POST">
                     <div class="form-group">
                         <label for="username" class="col-xs-3 col-md-3 control-label">用户名：</label>

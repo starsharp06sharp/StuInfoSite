@@ -25,14 +25,14 @@
     {% endfor %}
     <tr>
         <form method="POST" action="{{ url_for('add_student') }}">
-            <td><input type="text" name="id" /></td>
-            <td><input type="text" name="name" /></td>
+            <td><input type="text" name="id" class="form-control" /></td>
+            <td><input type="text" name="name" class="form-control" /></td>
             <td>
                 <label class="radio-inline"><input type="radio" name="gender" value="男" />男</label>
                 <label class="radio-inline"><input type="radio" name="gender" value="女" />女</label>
             </td>
-            <td><input type="text" name="phonenum" /></td>
-            <td><input type="text" name="emailaddr" /></td>
+            <td><input type="text" name="phonenum" class="form-control" /></td>
+            <td><input type="text" name="emailaddr" class="form-control" /></td>
             <td><input type="submit" value="添加" class="btn btn-primary btn-sm" /></td>
         </form>
     </tr>

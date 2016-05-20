@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import mysql.connector
+import pymysql
 import hashlib
 from flask import g
 from stuinfo import app
 
 
 def connet_db():
-    return mysql.connector.connect(user=app.config['MYSQL_USER'],
-                                   password=app.config['MYSQL_PASSWORD'],
-                                   database=app.config['MYSQL_DBNAME'])
+    return pymysql.connect(user=app.config['MYSQL_USER'],
+                           password=app.config['MYSQL_PASSWORD'],
+                           db=app.config['MYSQL_DBNAME'],
+                           charset='utf8',
+                           cursorclass=pymysql.cursors.DictCursor)
 
 
 def get_db():
@@ -27,7 +29,12 @@ def close_db(error):
 
 def exe_script(cursor, script):
     for sql in script.split(';'):
-        cursor.execute(sql.replace('\n', ''))
+        try:
+            cursor.execute(sql.replace('\n', ''))
+        except pymysql.err.InternalError as e:
+            # 若查询为空，不应报错
+            if e.args[0] != 1065:
+                raise e
 
 
 def create_table(drop=False):
@@ -44,44 +51,49 @@ def create_table(drop=False):
         db.commit()
         cursor.close()
         # 若没有用户，则添加一个默认用户名
-        create_user_if_no_user(db)
+        if no_user():
+            create_default_user()
 
 
-def create_user_if_no_user(db):
+def no_user():
+    db = get_db()
+    with db.cursor() as cursor:
+        if cursor.execute('select * from Users') == 0:
+            return True
+        else:
+            return False
+
+
+def create_default_user():
+    db = get_db()
     cursor = db.cursor()
-    cursor.execute('select * from Users')
-    if len(cursor.fetchall()) == 0:
-        username = app.config['DEFAULT_USER']
-        md5 = hashlib.md5()
-        md5.update(app.config['DEFAULT_PASSWORD'].encode('utf-8'))
-        passowrd_md5 = md5.hexdigest()
-        cursor.execute('insert into Users values (%s, %s)',
-                       [username, passowrd_md5])
-        db.commit()
+    username = app.config['DEFAULT_USER']
+    md5 = hashlib.md5()
+    md5.update(app.config['DEFAULT_PASSWORD'].encode('utf-8'))
+    passowrd_md5 = md5.hexdigest()
+    cursor.execute('insert into Users values (%s, %s)', [username, passowrd_md5])
+    db.commit()
     cursor.close()
 
 
 def check_identity(username, password):
-    try:
         db = get_db()
-        cursor = db.cursor()
-        cursor.execute('select username from Users')
-        usernames = [tp[0] for tp in cursor.fetchall()]
-        if username not in usernames:
-            return '用户名不存在'
-        cursor.execute(
-            'select password from Users where username = %s', [username])
-        match = cursor.fetchall()[0][0] == password
-        if not match:
-            return '密码错误'
-        else:
-            return None
-    finally:
-        cursor.close()
+        with db.cursor() as cursor:
+            cursor.execute('select username from Users')
+            usernames = [tp['username'] for tp in cursor.fetchall()]
+            if username not in usernames:
+                return '用户名不存在'
+            cursor.execute(
+                'select password from Users where username = %s', [username])
+            match = cursor.fetchall()[0]['password'] == password
+            if not match:
+                return '密码错误'
+            else:
+                return None
 
 
 def get_stu_info():
-    cursor = get_db().cursor(dictionary=True)
+    cursor = get_db().cursor()
     cursor.execute('select * from Students')
     res = cursor.fetchall()
     cursor.close()

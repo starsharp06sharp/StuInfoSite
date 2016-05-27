@@ -8,8 +8,6 @@ COPY . /StuInfoSite
 
 WORKDIR /StuInfoSite
 
-RUN apk add uwsgi
-
 RUN pip install -r requirements.txt
 
 RUN /StuInfoSite/gen_serect_key.sh

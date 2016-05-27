@@ -4,6 +4,8 @@ MAINTAINER starsharp06sharp <zhenglei@std.uestc.edu.cn>
 USER root
 EXPOSE 80
 
-RUN /usr/src/app/gen_serect_key.sh
+COPY . /StuInfoSite
 
-ENTRYPOINT /usr/src/app/run_in_docker.sh
+RUN /StuInfoSite/gen_serect_key.sh
+
+ENTRYPOINT /StuInfoSite/run_in_docker.sh

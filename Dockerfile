@@ -4,6 +4,6 @@ MAINTAINER starsharp06sharp <zhenglei@std.uestc.edu.cn>
 USER root
 EXPOSE 80
 
-RUN sh ./gen_serect_key.sh
+RUN /usr/src/app/gen_serect_key.sh
 
-ENTRYPOINT ["sh", "./run_in_docker.sh"]
+ENTRYPOINT /usr/src/app/run_in_docker.sh

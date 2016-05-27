@@ -1,4 +1,4 @@
-FROM daocloud.io/library/python:3.5-alpine
+FROM daocloud.io/library/python:3.5
 
 MAINTAINER starsharp06sharp <zhenglei@std.uestc.edu.cn>
 USER root

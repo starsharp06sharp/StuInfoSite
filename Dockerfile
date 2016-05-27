@@ -6,6 +6,8 @@ EXPOSE 80
 
 COPY . /StuInfoSite
 
+WORKDIR /StuInfoSite
+
 RUN /StuInfoSite/gen_serect_key.sh
 
 ENTRYPOINT /StuInfoSite/run_in_docker.sh

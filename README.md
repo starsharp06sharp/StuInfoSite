@@ -6,7 +6,7 @@
 ###安装依赖
 
 ```bash
-sudo apt-get install python3 pip3 mysql-server mysql-client
+sudo apt-get install python3 python3-pip mysql-server mysql-client
 pip3 install PyMySQL Flask
 ```
 

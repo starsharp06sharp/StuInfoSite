@@ -15,3 +15,6 @@ pip3 install PyMySQL Flask
 
 ###启动测试服务器
 运行`./start_debug_server.py`
+
+###生产服务器
+目前使用uwsgi，运行`sudo uwsgi uwsgi.ini`即可

@@ -28,6 +28,11 @@ def close_db(error):
         g.db.close()
 
 
+@app.before_first_request
+def init_table():
+    create_table()
+
+
 def exe_script(cursor, script):
     for sql in script.split(';'):
         try:

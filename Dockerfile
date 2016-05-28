@@ -12,4 +12,4 @@ RUN /StuInfoSite/production_config.sh
 
 VOLUME ["/StuInfoSite"]
 
-ENTRYPOINT /StuInfoSite/run_in_docker.sh
+ENTRYPOINT ["uwsgi", "uwsgi.ini"]

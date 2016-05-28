@@ -8,7 +8,8 @@ from stuinfo import app
 
 
 def connet_db():
-    return pymysql.connect(user=app.config['MYSQL_USER'],
+    return pymysql.connect(host=app.config['MYSQL_HOST'],
+                           user=app.config['MYSQL_USER'],
                            password=app.config['MYSQL_PASSWORD'],
                            db=app.config['MYSQL_DBNAME'],
                            charset='utf8',

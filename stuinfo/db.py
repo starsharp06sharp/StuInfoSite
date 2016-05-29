@@ -50,6 +50,7 @@ def create_table(drop=False):
 
 
 def dbfunc(func):
+    # 装饰器，自动获取db和cursor并自动销毁cursor
     def wrapper(*args, **kw):
         db = get_db()
         with db.cursor() as cursor:
@@ -69,13 +70,9 @@ def exe_script(db, cursor, script):
     db.commit()
 
 
-
 @dbfunc
 def no_user(db, cursor):
-    if cursor.execute('select * from Users') == 0:
-        return True
-    else:
-        return False
+    return cursor.execute('select * from Users') == 0
 
 
 @dbfunc
@@ -84,7 +81,7 @@ def create_default_user(db, cursor):
     md5 = hashlib.md5()
     md5.update(app.config['DEFAULT_PASSWORD'].encode('utf-8'))
     passowrd_md5 = md5.hexdigest()
-    cursor.execute('insert into Users values (%s, %s)', [username, passowrd_md5])
+    cursor.execute('insert into Users values (%s, %s)', (username, passowrd_md5))
     db.commit()
 
 
@@ -94,8 +91,7 @@ def check_identity(db, cursor, username, password):
     usernames = [tp['username'] for tp in cursor.fetchall()]
     if username not in usernames:
         return '用户名不存在'
-    cursor.execute(
-        'select password from Users where username = %s', [username])
+    cursor.execute('select password from Users where username = %s', (username,))
     match = cursor.fetchall()[0]['password'] == password
     if not match:
         return '密码错误'
@@ -106,8 +102,7 @@ def check_identity(db, cursor, username, password):
 @dbfunc
 def get_stu_info(db, cursor):
     cursor.execute('select * from Students')
-    res = cursor.fetchall()
-    return res
+    return cursor.fetchall()
 
 
 @dbfunc
@@ -115,13 +110,13 @@ def add_stu_info(db, cursor, id, name, gender, phonenum=None, emailaddr=None):
     cursor.execute('insert into Students values (%s, %s, %s, %s, %s)',
                    [id, name, gender, phonenum, emailaddr])
     db.commit()
-    success = cursor.rowcount == 1
-    return success
+    # 返回是否成功
+    return cursor.rowcount == 1
 
 
 @dbfunc
 def del_stu_info(db, cursor, id):
     cursor.execute('delete from Students where id = %s', [id])
     db.commit()
-    success = cursor.rowcount == 1
-    return success
+    # 返回是否成功
+    return cursor.rowcount == 1

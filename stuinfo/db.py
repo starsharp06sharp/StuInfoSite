@@ -33,6 +33,22 @@ def init_table():
     create_table()
 
 
+def create_table(drop=False):
+    with app.app_context():
+        if drop:
+            # 删除之前的旧表
+            with app.open_resource('drop_table.sql', mode='r') as f:
+                exe_script(f.read())
+
+        # 建立新表（若不存在）
+        with app.open_resource('schema.sql', mode='r') as f:
+            exe_script(f.read())
+
+        # 若没有用户，则添加一个默认用户名
+        if no_user():
+            create_default_user()
+
+
 def dbfunc(func):
     def wrapper(*args, **kw):
         db = get_db()
@@ -52,21 +68,6 @@ def exe_script(db, cursor, script):
                 raise e
     db.commit()
 
-
-def create_table(drop=False):
-    with app.app_context():
-        if drop:
-            # 删除之前的旧表
-            with app.open_resource('drop_table.sql', mode='r') as f:
-                exe_script(f.read())
-
-        # 建立新表（若不存在）
-        with app.open_resource('schema.sql', mode='r') as f:
-            exe_script(f.read())
-
-        # 若没有用户，则添加一个默认用户名
-        if no_user():
-            create_default_user()
 
 
 @dbfunc

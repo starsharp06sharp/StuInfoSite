@@ -28,11 +28,6 @@ def close_db(error):
         g.db.close()
 
 
-@app.before_first_request
-def init_table():
-    create_table()
-
-
 def create_table(drop=False):
     with app.app_context():
         if drop:
@@ -47,6 +42,8 @@ def create_table(drop=False):
         # 若没有用户，则添加一个默认用户名
         if no_user():
             create_default_user()
+
+app.before_first_request(create_table)
 
 
 def dbfunc(func):

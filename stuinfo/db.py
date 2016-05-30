@@ -43,6 +43,7 @@ def create_table(drop=False):
         if no_user():
             create_default_user()
 
+# 在地一个请求之前执行
 app.before_first_request(create_table)
 
 

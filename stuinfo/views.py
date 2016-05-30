@@ -21,7 +21,7 @@ def login():
             request.form['username'], request.form['password'])
         if error is None:
             session['logged_in_user'] = request.form['username']
-            flash('登录成功')
+            flash('登录成功', 'success')
             return redirect(url_for('index'))
     return render_template('login.html', error=error)
 
@@ -40,9 +40,9 @@ def add_student():
                               request.form['gender'], request.form['phonenum'],
                               request.form['emailaddr'])
     if success:
-        flash('添加成功')
+        flash('添加成功', 'success')
     else:
-        flash('添加失败')
+        flash('添加失败', 'error')
     return redirect(url_for('index'))
 
 
@@ -52,7 +52,7 @@ def delete_student(student_id):
         abort(403)
     success = db.del_stu_info(student_id)
     if success:
-        flash('删除成功')
+        flash('删除成功', 'success')
     else:
-        flash('删除失败')
+        flash('删除失败', 'error')
     return redirect(url_for('index'))

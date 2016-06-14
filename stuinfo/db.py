@@ -29,19 +29,18 @@ def close_db(error):
 
 
 def create_table(drop=False):
-    with app.app_context():
-        if drop:
-            # 删除之前的旧表
-            with app.open_resource('drop_table.sql', mode='r') as f:
-                exe_script(f.read())
-
-        # 建立新表（若不存在）
-        with app.open_resource('schema.sql', mode='r') as f:
+    if drop:
+        # 删除之前的旧表
+        with app.open_resource('drop_table.sql', mode='r') as f:
             exe_script(f.read())
 
-        # 若没有用户，则添加一个默认用户名
-        if no_user():
-            create_default_user()
+    # 建立新表（若不存在）
+    with app.open_resource('schema.sql', mode='r') as f:
+        exe_script(f.read())
+
+    # 若没有用户，则添加一个默认用户名
+    if no_user():
+        create_default_user()
 
 # 在地一个请求之前执行
 app.before_first_request(create_table)

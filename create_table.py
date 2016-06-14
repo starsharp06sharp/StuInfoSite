@@ -13,4 +13,5 @@ if __name__ == '__main__':
     app.config['MYSQL_HOST'] = argv[1]
     drop = len(argv) > 2 and argv[2] == '--drop'
     print('drop:', drop)
-    create_table(drop)
+    with app.app_context():
+        create_table(drop)

@@ -1,6 +1,8 @@
 create table if not exists Users (
     username varchar(255) primary key,
-    password char(32) not null
+    password char(32) not null,
+    role char(7) not null,
+    check(role in ('admin', 'teacher'))
 );
 
 create table if not exists Students (

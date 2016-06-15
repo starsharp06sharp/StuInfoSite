@@ -78,7 +78,8 @@ def create_default_user(db, cursor):
     md5 = hashlib.md5()
     md5.update(app.config['DEFAULT_PASSWORD'].encode('utf-8'))
     passowrd_md5 = md5.hexdigest()
-    cursor.execute('insert into Users values (%s, %s)', (username, passowrd_md5))
+    cursor.execute('insert into Users values (%s, %s, %s)',
+                   [username, passowrd_md5, 'admin'])
     db.commit()
 
 
@@ -88,7 +89,7 @@ def check_identity(db, cursor, username, password):
     usernames = [tp['username'] for tp in cursor.fetchall()]
     if username not in usernames:
         return '用户名不存在'
-    cursor.execute('select password from Users where username = %s', (username,))
+    cursor.execute('select password from Users where username = %s', [username])
     match = cursor.fetchall()[0]['password'] == password
     if not match:
         return '密码错误'

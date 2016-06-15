@@ -1,4 +1,5 @@
 /// <reference path="jquery.d.ts" />
+'use strict';
 
 (function () {
     $('#login-form').submit(function (e) {

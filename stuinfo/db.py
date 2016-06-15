@@ -59,7 +59,7 @@ def dbfunc(func):
 def exe_script(db, cursor, script):
     for sql in script.split(';'):
         try:
-            cursor.execute(sql.replace('\n', ''))
+            cursor.execute(sql)
         except pymysql.err.InternalError as e:
             # 若查询为空，不应报错
             if e.args[0] != 1065:

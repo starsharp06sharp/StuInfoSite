@@ -21,6 +21,6 @@ create table if not exists Class (
 
 create table if not exists Teachings(
     teacher varchar(255),
-    classid varchar(32) references Class(id)
+    classid varchar(32) references Class(id),
     check(teacher in (select username from Users where role = 'teacher'))
 );

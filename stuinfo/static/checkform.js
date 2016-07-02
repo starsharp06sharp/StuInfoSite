@@ -12,6 +12,12 @@
         return true;
     });
 
+    $('.modify-user-form').submit(function (e) {
+        var parentNode = $(this.parentNode);// 不知道为什么form元素的find方法找不到什么东西
+        parentNode.find('.md5-password').val(hex_md5(parentNode.find('.input-password').val()));
+        return true;
+    });
+
     $('#ch-password-form').submit(function (e) {
         if ($('#new-password').val() !== $('#repeat-password').val()) {
             $('#new-password-form').addClass('has-error');

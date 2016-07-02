@@ -159,3 +159,17 @@ def del_user(db, cursor, username):
     db.commit()
     # 返回是否成功
     return cursor.rowcount == 1
+
+
+@dbfunc
+def modify_user(db, cursor, username, password, role):
+    if username == '':
+        query = 'update Users set role = %s where username = %s'
+        params = [role, username]
+    else:
+        query = 'update Users set role = %s , password = %s where username = %s'
+        params = [role, password, username]
+    cursor.execute(query, params)
+    db.commit()
+    # 返回是否成功
+    return cursor.rowcount == 1

@@ -103,6 +103,21 @@ def add_user():
     return redirect(url_for('user_admin_page'))
 
 
+@app.route('/user/modify/<username>', methods=['POST'])
+def modify_user(username):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    success = db.modify_user(username, request.form['password'],
+                             request.form['role'])
+    if success:
+        flash('修改成功', 'success')
+    else:
+        flash('修改失败', 'error')
+    return redirect(url_for('user_admin_page'))
+
+
 @app.route('/user/delete/<username>', methods=['GET'])
 def del_user(username):
     if not session.get('logged_in_user'):

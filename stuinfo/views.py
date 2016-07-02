@@ -6,6 +6,13 @@ from stuinfo import app, db
 import json
 
 
+@app.context_processor
+def inject_extra_context():
+    return dict(
+        get_role=db.get_role
+    )
+
+
 @app.route('/', methods=['GET'])
 def index():
     if not session.get('logged_in_user'):
@@ -70,3 +77,41 @@ def modify_password():
     else:
         flash('修改失败，密码错误', 'error')
     return redirect(url_for('index'))
+
+
+@app.route('/user/admin', methods=['GET'])
+def user_admin_page():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    return render_template('admin.html', users=db.get_user_info())
+
+
+@app.route('/user/add', methods=['POST'])
+def add_user():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    success = db.create_user(request.form['username'], request.form['password'],
+                             request.form['role'])
+    if success:
+        flash('创建成功', 'success')
+    else:
+        flash('创建失败', 'error')
+    return redirect(url_for('user_admin_page'))
+
+
+@app.route('/user/delete/<username>', methods=['GET'])
+def del_user(username):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    success = db.del_user(username)
+    if success:
+        flash('删除成功', 'success')
+    else:
+        flash('删除失败', 'error')
+    return redirect(url_for('user_admin_page'))

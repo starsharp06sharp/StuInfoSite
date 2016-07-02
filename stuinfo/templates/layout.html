@@ -31,12 +31,15 @@
                     <span class="icon-bar"></span>
                 </a>
             </div>
-            <a class="navbar-brand" href="#">学生信息管理</a>
+            <a class="navbar-brand" href="/">学生信息管理</a>
         </div>
         
         <div class="visible-xs-block">
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
+                    {% if get_role(session['logged_in_user']) == 'admin' %}
+                    <li><a href="{{ url_for('user_admin_page') }}">用户管理</a></li>
+                    {% endif %}
                     <li><a href="" data-toggle="modal" data-target="#ch-passwd">修改密码</a></li>
                     <li><a href="{{ url_for('logout') }}">退出</a></li>
                 </ul>
@@ -50,6 +53,9 @@
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </a>
                     <ul class="dropdown-menu">
+                        {% if get_role(session['logged_in_user']) == 'admin' %}
+                        <li><a href="{{ url_for('user_admin_page') }}">用户管理</a></li>
+                        {% endif %}
                         <li><a href="" data-toggle="modal" data-target="#ch-passwd">修改密码</a></li>
                         <li><a href="{{ url_for('logout') }}">退出</a></li>
                     </ul>
@@ -85,9 +91,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-10 col-md-offset-1">
-            {% block content%}{% endblock %}
-        </div>
+        {% block content%}{% endblock %}
     </div>
 </div>
 

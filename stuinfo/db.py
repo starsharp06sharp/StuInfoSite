@@ -90,7 +90,7 @@ def check_identity(db, cursor, username, password):
     if username not in usernames:
         return '用户名不存在'
     cursor.execute('select password from Users where username = %s', [username])
-    match = cursor.fetchall()[0]['password'] == password
+    match = cursor.fetchone()['password'] == password
     if not match:
         return '密码错误'
     else:
@@ -124,6 +124,38 @@ def del_stu_info(db, cursor, id):
 def modify_user_password(db, cursor, username, old_password, new_password):
     cursor.execute('update Users set password = %s where username = %s and password = %s',
                    [new_password, username, old_password])
+    db.commit()
+    # 返回是否成功
+    return cursor.rowcount == 1
+
+
+@dbfunc
+def get_role(db, cursor, username):
+    cursor.execute('select role from Users where username = %s', [username])
+    if cursor.rowcount != 1:
+        return None
+    else:
+        return cursor.fetchone()['role']
+
+
+@dbfunc
+def get_user_info(db, cursor):
+    cursor.execute('select * from Users')
+    return cursor.fetchall()
+
+
+@dbfunc
+def create_user(db, cursor, username, password, role):
+    cursor.execute('insert into Users values (%s, %s, %s)',
+                   [username, password, role])
+    db.commit()
+    # 返回是否成功
+    return cursor.rowcount == 1
+
+
+@dbfunc
+def del_user(db, cursor, username):
+    cursor.execute('delete from Users where username = %s', [username])
     db.commit()
     # 返回是否成功
     return cursor.rowcount == 1

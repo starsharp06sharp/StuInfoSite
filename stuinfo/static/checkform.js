@@ -7,6 +7,11 @@
         return true;
     });
 
+    $('#add-user-form').submit(function (e) {
+        $('#md5-password').val(hex_md5($('#input-password').val()));
+        return true;
+    });
+
     $('#ch-password-form').submit(function (e) {
         if ($('#new-password').val() !== $('#repeat-password').val()) {
             $('#new-password-form').addClass('has-error');

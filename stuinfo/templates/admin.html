@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user['username'] }}</td>
+                    <td>...</td>
+                    <td>{{ user['role'] }}</td>
+                    <td><a href="{{ url_for('del_user', username=user['username']) }}" class="btn btn-danger btn-sm">删除</a></td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <form method="POST" action="{{ url_for('add_user') }}" id="add-user-form">
+                        <td><input type="text" name="username" class="form-control"/></td>
+                        <td><input type="password" id="input-password" class="form-control"/></td>
+                        <td><input type="text" name="role" class="form-control"/></td>
+                        <td><input type="submit" value="添加" class="btn btn-primary btn-sm"/></td>
+                        <input type="hidden" id="md5-password" name="password"/>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

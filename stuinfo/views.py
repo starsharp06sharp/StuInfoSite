@@ -56,3 +56,17 @@ def delete_student(student_id):
     else:
         flash('删除失败', 'error')
     return redirect(url_for('index'))
+
+
+@app.route('/user/modifypassword', methods=['POST'])
+def modify_password():
+    if not session.get('logged_in_user'):
+        abort(403)
+    success = db.modify_user_password(session['logged_in_user'],
+                                      request.form['old-password'],
+                                      request.form['new-password'])
+    if success:
+        flash('成功修改密码', 'success')
+    else:
+        flash('修改失败，密码错误', 'error')
+    return redirect(url_for('index'))

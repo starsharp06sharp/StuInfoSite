@@ -7,6 +7,19 @@
         return true;
     });
 
+    $('#ch-password-form').submit(function (e) {
+        if ($('#new-password').val() !== $('#repeat-password').val()) {
+            $('#new-password-form').addClass('has-error');
+            $('#repeat-password-form').addClass('has-error');
+            $('#ch-passwd-error-message').html('两次密码不一致');
+            $('#ch-passwd-error-message').removeClass('hidden');
+            return false;
+        }
+        $('#md5-old-password').val(hex_md5($('#old-password').val()));
+        $('#md5-new-password').val(hex_md5($('#new-password').val()));
+        return true;
+    });
+
     var hexcase = 0;
     var b64pad = "";
     var chrsz = 8;

@@ -118,3 +118,12 @@ def del_stu_info(db, cursor, id):
     db.commit()
     # 返回是否成功
     return cursor.rowcount == 1
+
+
+@dbfunc
+def modify_user_password(db, cursor, username, old_password, new_password):
+    cursor.execute('update Users set password = %s where username = %s and password = %s',
+                   [new_password, username, old_password])
+    db.commit()
+    # 返回是否成功
+    return cursor.rowcount == 1

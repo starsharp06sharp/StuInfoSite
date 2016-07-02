@@ -121,6 +121,15 @@ def del_stu_info(db, cursor, id):
 
 
 @dbfunc
+def modify_stu_info(db, cursor, id, phonenum, emailaddr):
+    cursor.execute('update Students set phonenum = %s , emailaddr = %s where id = %s',
+                   [phonenum, emailaddr, id])
+    db.commit()
+    # 返回是否成功
+    return cursor.rowcount == 1
+
+
+@dbfunc
 def modify_user_password(db, cursor, username, old_password, new_password):
     cursor.execute('update Users set password = %s where username = %s and password = %s',
                    [new_password, username, old_password])

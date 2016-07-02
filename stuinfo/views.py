@@ -65,6 +65,18 @@ def delete_student(student_id):
     return redirect(url_for('index'))
 
 
+@app.route('/modify/<id>', methods=['POST'])
+def modify_student(id):
+    if not session.get('logged_in_user'):
+        abort(403)
+    success = db.modify_stu_info(id, request.form['phonenum'], request.form['emailaddr'])
+    if success:
+        flash('修改成功', 'success')
+    else:
+        flash('修改失败', 'error')
+    return redirect(url_for('index'))
+
+
 @app.route('/user/modifypassword', methods=['POST'])
 def modify_password():
     if not session.get('logged_in_user'):

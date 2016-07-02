@@ -17,12 +17,17 @@
             <tbody>
                 {% for student in students %}
                 <tr>
-                    <td>{{ student['id'] }}</td>
-                    <td>{{ student['name'] }}</td>
-                    <td>{{ student['gender'] }}</td>
-                    <td>{{ student['phonenum'] }}</td>
-                    <td>{{ student['emailaddr'] }}</td>
-                    <td><a href="{{ url_for('delete_student', student_id=student['id']) }}" class="btn btn-danger btn-sm">删除</a></td>
+                    <form method="POST" action="{{ url_for('modify_student', id=student['id']) }}" class="modify-student-form">
+                        <td>{{ student['id'] }}</td>
+                        <td>{{ student['name'] }}</td>
+                        <td>{{ student['gender'] }}</td>
+                        <td><input type="tel" value="{{ student['phonenum'] }}" name="phonenum" class="form-control"/></td>
+                        <td><input type="email" value="{{ student['emailaddr'] }}" name="emailaddr" class="form-control"/></td>
+                        <td>
+                            <input type="submit" value="修改" class="btn btn-primary btn-sm"/>
+                            <a href="{{ url_for('delete_student', student_id=student['id']) }}" class="btn btn-danger btn-sm">删除</a>
+                        </td>
+                    </form>
                 </tr>
                 {% endfor %}
                 
@@ -34,8 +39,8 @@
                             <label class="radio-inline"><input type="radio" name="gender" value="男" />男</label>
                             <label class="radio-inline"><input type="radio" name="gender" value="女" />女</label>
                         </td>
-                        <td><input type="text" name="phonenum" class="form-control" /></td>
-                        <td><input type="text" name="emailaddr" class="form-control" /></td>
+                        <td><input type="tel" name="phonenum" class="form-control" /></td>
+                        <td><input type="email" name="emailaddr" class="form-control" /></td>
                         <td><input type="submit" value="添加" class="btn btn-primary btn-sm" /></td>
                     </form>
                 </tr>

@@ -93,46 +93,46 @@
 
 <!-- 修改密码的对话框 -->
 <div class="modal fade" id="ch-passwd" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
-      </div>
-    <form id="ch-password-form" action="{{ url_for('modify_password') }}" method="POST">
-      <div class="modal-body">
-        <div class="form-group" id="old-password-form">
-            <label for="old-password" class="col-xs-3 col-md-3 control-label">原密码：</label>
-            <div class="col-xs-9 col-md-9">
-                <input type="password" id="old-password" class="form-control" />
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
             </div>
-            <div class="clearfix"></div>
+            <form id="ch-password-form" action="{{ url_for('modify_password') }}" method="POST">
+                <div class="modal-body">
+                    <div class="form-group" id="old-password-form">
+                        <label for="old-password" class="col-xs-3 col-md-3 control-label">原密码：</label>
+                        <div class="col-xs-9 col-md-9">
+                            <input type="password" id="old-password" class="form-control" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" id="new-password-form">
+                        <label for="new-password" class="col-xs-3 col-md-3 control-label">新密码：</label>
+                        <div class="col-xs-9 col-md-9">
+                            <input type="password" id="new-password" class="form-control" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" id="repeat-password-form">
+                        <label for="repeat-password" class="col-xs-3 col-md-3 control-label">重复密码：</label>
+                        <div class="col-xs-9 col-md-9">
+                            <input type="password" id="repeat-password" class="form-control" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <p class="hidden text-danger" id="ch-passwd-error-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="md5-old-password" name="old-password" />
+                    <input type="hidden" id="md5-new-password" name="new-password" />
+                    <input type="reset" value="清除" class="btn btn-default" />
+                    <input type="submit" value="提交" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
-        <div class="form-group" id="new-password-form">
-            <label for="new-password" class="col-xs-3 col-md-3 control-label">新密码：</label>
-            <div class="col-xs-9 col-md-9">
-                <input type="password" id="new-password" class="form-control" />
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="form-group" id ="repeat-password-form">
-            <label for="repeat-password" class="col-xs-3 col-md-3 control-label">重复密码：</label>
-            <div class="col-xs-9 col-md-9">
-                <input type="password" id="repeat-password" class="form-control" />
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <p class="hidden text-danger"  id="ch-passwd-error-message"></p>
-      </div>
-      <div class="modal-footer">
-        <input type="hidden" id="md5-old-password" name="old-password" />
-        <input type="hidden" id="md5-new-password" name="new-password" />
-        <input type="reset" value="清除" class="btn btn-default" />
-        <input type="submit" value="提交" class="btn btn-primary" />
-      </div>
-    </form>
     </div>
-  </div>
 </div>
 
 {% endblock %}

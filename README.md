@@ -21,3 +21,8 @@ pip3 install PyMySQL Flask
 ###生产服务器
 现在生产服务器使用docker和docker-compose
 具体方法参见[StuInfoSite-Deploy](https://github.com/starsharp06sharp/StuInfoSite-Deploy)
+
+###如何编译成image
+```bash
+$ docker build -t="stuinfosite" .
+```

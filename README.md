@@ -19,4 +19,5 @@ pip3 install PyMySQL Flask
 运行`./start_debug_server.py`
 
 ###生产服务器
-目前使用uwsgi，运行`sudo uwsgi uwsgi.ini`即可
+现在生产服务器使用docker和docker-compose
+具体方法参见[StuInfoSite-Deploy](https://github.com/starsharp06sharp/StuInfoSite-Deploy)

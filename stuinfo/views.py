@@ -127,12 +127,16 @@ def modify_user(username):
         return redirect(url_for('login'))
     if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
-    success = db.modify_user(username, request.form['password'],
-                             request.form['role'])
+    success = None
+    if not (username == 'root' and request.form['role'] != 'admin'):
+        success = db.modify_user(username, request.form['password'],
+                                 request.form['role'])
     if success:
         flash('修改成功', 'success')
-    else:
+    elif not success:
         flash('修改失败', 'error')
+    else:
+        flash('不允许修改root用户的角色', 'error')
     return redirect(url_for('user_admin_page'))
 
 
@@ -142,9 +146,13 @@ def del_user(username):
         return redirect(url_for('login'))
     if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
-    success = db.del_user(username)
+    success = None
+    if username != 'root':
+        success = db.del_user(username)
     if success:
         flash('删除成功', 'success')
-    else:
+    elif not success:
         flash('删除失败', 'error')
+    else:
+        flash('不允许删除root用户', 'error')
     return redirect(url_for('user_admin_page'))

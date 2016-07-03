@@ -22,7 +22,9 @@
                             <select class="form-control" name="role">
                             {% if user['role'] == 'admin' %}
                                 <option value="admin">管理员</option>
-                                <option value="teacher">教师</option>
+                                    {% if user['username'] != 'root' %}
+                                    <option value="teacher">教师</option>
+                                    {% endif %}
                             {% elif user['role'] == 'teacher' %}
                                 <option value="teacher">教师</option>
                                 <option value="admin">管理员</option>
@@ -32,7 +34,9 @@
                         <td>
                             <input type="hidden" class="md5-password" name="password"/>
                             <input type="submit" value="修改" class="btn btn-primary btn-sm"/>
+                            {% if user['username'] != 'root' %}
                             <a href="{{ url_for('del_user', username=user['username']) }}" class="btn btn-danger btn-sm">删除</a>
+                            {% endif %}
                         </td>
                     </form>
                 </tr>

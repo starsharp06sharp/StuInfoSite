@@ -17,7 +17,12 @@
 </head>
 
 <body>
-{% block body %}{% endblock %}
+{% block body %}
+<!--[if lte IE 9]>
+<h1>警告</h1>
+<h4>您正在使用过于陈旧的浏览器，本页面将会出现显示问题甚至不能正常工作，强烈建议您使用新的浏览器（如IE11,Chrome,Firefox等）！</h4>
+<![endif]-->
+{% endblock %}
 </body>
 {% block script %}
 <script src="{{ url_for('static', filename='jquery/3.0.0/jquery.min.js') }}"></script>

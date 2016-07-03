@@ -1,23 +1,24 @@
 /// <reference path="jquery.d.ts" />
-'use strict';
 
-(function () {
+$(function () {
+    'use strict';
+    //'login.html'中的登录表单 
     $('#login-form').submit(function (e) {
         $('#md5-password').val(hex_md5($('#input-password').val()));
         return true;
     });
-
+    //’admin.html‘中的添加用户表单
     $('#add-user-form').submit(function (e) {
         $('#md5-password').val(hex_md5($('#input-password').val()));
         return true;
     });
-
+    //’admin.html‘中每个用户的重置密码表单
     $('.modify-user-form').submit(function (e) {
         var parentNode = $(this.parentNode);// 不知道为什么form元素的find方法找不到什么东西
         parentNode.find('.md5-password').val(hex_md5(parentNode.find('.input-password').val()));
         return true;
     });
-
+    //index.html‘中的修改当前用户密码表单
     $('#ch-password-form').submit(function (e) {
         if ($('#new-password').val() !== $('#repeat-password').val()) {
             $('#new-password-form').addClass('has-error');
@@ -40,9 +41,6 @@
     function hex_hmac_md5(key, data) { return binl2hex(core_hmac_md5(key, data)); }
     function b64_hmac_md5(key, data) { return binl2b64(core_hmac_md5(key, data)); }
     function str_hmac_md5(key, data) { return binl2str(core_hmac_md5(key, data)); }
-    function md5_vm_test() {
-        return hex_md5("abc") == "900150983cd24fb0d6963f7d28e17f72";
-    }
     function core_md5(x, len) {
         x[len >> 5] |= 0x80 << ((len) % 32);
         x[(((len + 64) >>> 9) << 4) + 14] = len;
@@ -207,4 +205,4 @@
         }
         return str;
     }
-})();
+});

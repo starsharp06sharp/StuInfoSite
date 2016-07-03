@@ -42,6 +42,8 @@ def logout():
 @app.route('/add', methods=['POST'])
 def add_student():
     if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
     success = db.add_stu_info(request.form['id'], request.form['name'],
                               request.form['gender'], request.form['phonenum'],
@@ -56,6 +58,8 @@ def add_student():
 @app.route('/delete/<student_id>', methods=['GET'])
 def delete_student(student_id):
     if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
     success = db.del_stu_info(student_id)
     if success:
@@ -68,6 +72,8 @@ def delete_student(student_id):
 @app.route('/modify/<id>', methods=['POST'])
 def modify_student(id):
     if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
     success = db.modify_stu_info(id, request.form['phonenum'], request.form['emailaddr'])
     if success:

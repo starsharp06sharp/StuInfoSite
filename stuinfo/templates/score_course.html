@@ -35,7 +35,7 @@
                         <td>
                             <select class="form-control" name="stu_id" id="unselected_stu_id">
                                 {% for student in unselected_students %}
-                                <option value="{{ student['id'] }}">{{ student['id'] }}</option>
+                                <option>{{ student['id'] }}</option>
                                 {% endfor %}
                             </select>
                         </td>

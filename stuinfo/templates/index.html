@@ -19,7 +19,7 @@
                 <tr>
                 {% if get_role(session['logged_in_user']) == 'teacher' %}
                     <td>{{ student['id'] }}</td>
-                    <td>{{ student['name'] }}</td>
+                    <td><a href="{{ url_for('get_score', id=student['id'], type='student') }}">{{ student['name'] }}</a></td>
                     <td>{{ student['gender'] }}</td>
                     <td>{{ student['phonenum'] }}</td>
                     <td>{{ student['emailaddr'] }}</td>
@@ -27,7 +27,7 @@
                 {% else %}
                     <form method="POST" action="{{ url_for('modify_student', id=student['id']) }}" class="modify-student-form">
                         <td>{{ student['id'] }}</td>
-                        <td>{{ student['name'] }}</td>
+                        <td><a href="{{ url_for('get_score', id=student['id'], type='student') }}">{{ student['name'] }}</a></td>
                         <td>{{ student['gender'] }}</td>
                         <td><input type="tel" value="{{ student['phonenum'] }}" name="phonenum" class="form-control"/></td>
                         <td><input type="email" value="{{ student['emailaddr'] }}" name="emailaddr" class="form-control"/></td>
@@ -59,4 +59,11 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+$
+</script>
 {% endblock %}

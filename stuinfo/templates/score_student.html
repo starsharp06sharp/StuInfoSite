@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption>{{ stu_id }} {{ get_stu_name(stu_id) }}</caption>
+            <thead>
+                <th>课程</th>
+                <th>分数</th>
+                <th>操作</th>
+            </thead>
+
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <form method="POST" action="{{ url_for('modify_score') }}">
+                        <td>{{ score['name'] }}</td>
+                        <td><input type="text" name="score" value="{{ score['score'] }}" class="form-control"/></td>
+                        <td>
+                            <input type="submit" value="修改" class="btn btn-primary btn-sm"/>
+                            <a href="{{ url_for('del_score_in_student', stu_id=stu_id, course_id=score['id']) }}" class="btn btn-danger btn-sm">删除</a>
+                        </td>
+                        <input type="hidden" name="stu_id" value="{{ stu_id }}"/>
+                        <input type="hidden" name="c_id" value="{{ score['id'] }}"/>
+                        <input type="hidden" name="type" value="student"/>
+                    </form>
+                </tr>
+                {% endfor %}
+
+                {% if unselected_course %}
+                <tr>
+                    <form method="POST" action="{{ url_for('add_score') }}">
+                        <td>
+                            <select class="form-control" name="course_id">
+                                {% for course in unselected_course %}
+                                <option value="{{ course['id'] }}">{{ course['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" name="score"/></td>
+                        <td><input type="submit" value="添加" class="btn btn-primary btn-sm"/></td>
+                        <input type="hidden" name="stu_id" value="{{ stu_id }}"/>
+                        <input type="hidden" name="type" value="student"/>
+                    </form>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

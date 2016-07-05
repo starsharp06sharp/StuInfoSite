@@ -40,6 +40,7 @@
                     {% if get_role(session['logged_in_user']) == 'admin' %}
                     <li><a href="{{ url_for('user_admin_page') }}">用户管理</a></li>
                     {% endif %}
+                    <li><a href="{{ url_for('get_course') }}">课程管理</a></li>
                     <li><a href="" data-toggle="modal" data-target="#ch-passwd">修改密码</a></li>
                     <li><a href="{{ url_for('logout') }}">退出</a></li>
                 </ul>
@@ -56,6 +57,7 @@
                         {% if get_role(session['logged_in_user']) == 'admin' %}
                         <li><a href="{{ url_for('user_admin_page') }}">用户管理</a></li>
                         {% endif %}
+                        <li><a href="{{ url_for('get_course') }}">课程管理</a></li>
                         <li><a href="" data-toggle="modal" data-target="#ch-passwd">修改密码</a></li>
                         <li><a href="{{ url_for('logout') }}">退出</a></li>
                     </ul>

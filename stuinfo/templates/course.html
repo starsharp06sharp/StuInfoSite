@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>课程名</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course['id'] }}</td>
+                    <td><a href="{{ url_for('get_score', id=course['id'], type='course')}}">{{ course['name'] }}</a></td>
+                    <td><a href="{{ url_for('del_course', course_id=course['id']) }}" class="btn btn-danger btn-sm">删除</a></td>
+                </tr>
+                {% endfor %}
+
+                {% if get_role(session['logged_in_user']) == 'admin' %}
+                <tr>
+                    <form method="POST" action="{{ url_for('add_course') }}">
+                        <td></td>
+                        <td><input type="text" name="coursename" class="form-control"/></td>
+                        <td><input type="submit" value="添加" class="btn btn-primary btn-sm"/></td>
+                    </form>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

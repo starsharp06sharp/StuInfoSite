@@ -108,7 +108,7 @@ def get_stu_info(db, cursor):
 def add_stu_info(db, cursor, id, name, gender, phonenum=None, emailaddr=None):
     try:
         cursor.execute('insert into Students values (%s, %s, %s, %s, %s)',
-                    [id, name, gender, phonenum, emailaddr])
+                       [id, name, gender, phonenum, emailaddr])
         db.commit()
         # 返回是否成功
         return cursor.rowcount == 1
@@ -128,10 +128,19 @@ def del_stu_info(db, cursor, id):
 
 
 @dbfunc
+def get_stu_name(db, cursor, id):
+    cursor.execute('select name from Students where id = %s', [id])
+    if cursor.rowcount != 1:
+        return None
+    else:
+        return cursor.fetchone()['name']
+
+
+@dbfunc
 def modify_stu_info(db, cursor, id, phonenum, emailaddr):
     try:
         cursor.execute('update Students set phonenum = %s , emailaddr = %s where id = %s',
-                    [phonenum, emailaddr, id])
+                       [phonenum, emailaddr, id])
         db.commit()
         # 返回是否成功
         return cursor.rowcount == 1
@@ -143,7 +152,7 @@ def modify_stu_info(db, cursor, id, phonenum, emailaddr):
 def modify_user_password(db, cursor, username, old_password, new_password):
     try:
         cursor.execute('update Users set password = %s where username = %s and password = %s',
-                    [new_password, username, old_password])
+                       [new_password, username, old_password])
         db.commit()
         # 返回是否成功
         return cursor.rowcount == 1
@@ -170,7 +179,7 @@ def get_user_info(db, cursor):
 def create_user(db, cursor, username, password, role):
     try:
         cursor.execute('insert into Users values (%s, %s, %s)',
-                    [username, password, role])
+                       [username, password, role])
         db.commit()
         # 返回是否成功
         return cursor.rowcount == 1
@@ -204,3 +213,114 @@ def modify_user(db, cursor, username, password, role):
         return cursor.rowcount == 1
     except MySQLError:
         return False
+
+
+@dbfunc
+def add_course(db, cursor, name):
+    try:
+        cursor.execute('insert into Courses(name) values (%s)', [name])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
+
+
+@dbfunc
+def del_course(db, cursor, id):
+    try:
+        cursor.execute('delete from Courses where id = %s', [id])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
+
+
+@dbfunc
+def get_courses(db, cursor):
+    cursor.execute('select * from Courses')
+    return cursor.fetchall()
+
+
+@dbfunc
+def get_course_name(db, cursor, id):
+    cursor.execute('select name from Courses where id = %s', [id])
+    if cursor.rowcount != 1:
+        return None
+    else:
+        return cursor.fetchone()['name']
+
+
+@dbfunc
+def add_score(db, cursor, stu_id, c_id, score):
+    try:
+        cursor.execute('insert into Score values (%s, %s, %s)',
+                       [stu_id, c_id, score])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
+
+
+@dbfunc
+def del_score(db, cursor, stu_id, c_id):
+    try:
+        cursor.execute('delete from Score where stu_id = %s and c_id = %s',
+                       [stu_id, c_id])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
+
+
+@dbfunc
+def modify_score(db, cursor, stu_id, c_id, score):
+    try:
+        cursor.execute('update Score set score = %s where stu_id = %s and c_id = %s',
+                       [score, stu_id, c_id])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
+
+
+@dbfunc
+def get_score_by_stu_id(db, cursor, stu_id):
+    cursor.execute('select id, name, score\
+                    from Courses, Score\
+                    where Courses.id = c_id and stu_id = %s',
+                   [stu_id])
+    return cursor.fetchall()
+
+
+@dbfunc
+def get_unselected_course(db, cursor, stu_id):
+    cursor.execute('select id, name from Courses\
+                    where id not in (\
+                        select c_id from Score\
+                        where stu_id = %s)',
+                   [stu_id])
+    return cursor.fetchall()
+
+
+@dbfunc
+def get_score_by_course_id(db, cursor, course_id):
+    cursor.execute('select id, name, score\
+                    from Students, Score\
+                    where Students.id = stu_id and c_id = %s',
+                   [course_id])
+    return cursor.fetchall()
+
+
+@dbfunc
+def get_unselected_student(db, cursor, course_id):
+    cursor.execute('select id, name from Students\
+                    where id not in(\
+                        select stu_id from Score\
+                        where c_id = %s)',
+                   [course_id])
+    return cursor.fetchall()

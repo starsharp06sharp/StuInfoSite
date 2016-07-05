@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption>{{ c_id }} {{ get_course_name(c_id) }}</caption>
+            <thead>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>分数</th>
+                <th>操作</th>
+            </thead>
+
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <form method="POST" action="{{ url_for('modify_score') }}">
+                        <td>{{ score['id'] }}</td>
+                        <td>{{ score['name'] }}</td>
+                        <td><input type="text" name="score" value="{{ score['score'] }}" class="form-control"/></td>
+                        <td>
+                            <input type="submit" value="修改" class="btn btn-primary btn-sm"/>
+                            <a href="{{ url_for('del_score_in_course', course_id=c_id, stu_id=score['id']) }}" class="btn btn-danger btn-sm">删除</a>
+                        </td>
+                        <input type="hidden" name="stu_id" value="{{ score['id'] }}"/>
+                        <input type="hidden" name="c_id" value="{{ c_id }}"/>
+                        <input type="hidden" name="type" value="course"/>
+                    </form>
+                </tr>
+                {% endfor %}
+
+                {% if unselected_students %}
+                <tr>
+                    <form method="POST" action="{{ url_for('add_score') }}">
+                        <td>
+                            <select class="form-control" name="stu_id" id="unselected_stu_id">
+                                {% for student in unselected_students %}
+                                <option value="{{ student['id'] }}">{{ student['id'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="unselected_stu_name">
+                                {% for student in unselected_students %}
+                                <option value="{{ student['id'] }}">{{ student['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" name="score"/></td>
+                        <td><input type="submit" value="添加" class="btn btn-primary btn-sm"/></td>
+                        <input type="hidden" name="course_id" value="{{ c_id }}"/>
+                        <input type="hidden" name="type" value="course"/>
+                    </form>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+$(function(){
+    $('#unselected_stu_id').change(function(e) {
+        $('#unselected_stu_name').val($('#unselected_stu_id').val());
+    });
+    $('#unselected_stu_name').change(function(e) {
+        $('#unselected_stu_id').val($('#unselected_stu_name').val());
+    });
+});
+</script>
+{% endblock %}

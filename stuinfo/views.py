@@ -9,7 +9,10 @@ import json
 @app.context_processor
 def inject_extra_context():
     return dict(
-        get_role=db.get_role
+        get_role=db.get_role,
+        len=len,
+        get_course_name=db.get_course_name,
+        get_stu_name=db.get_stu_name
     )
 
 
@@ -156,3 +159,121 @@ def del_user(username):
     else:
         flash('不允许删除root用户', 'error')
     return redirect(url_for('user_admin_page'))
+
+
+@app.route('/course', methods=['GET'])
+def get_course():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    return render_template('course.html', courses=db.get_courses())
+
+
+@app.route('/course/add', methods=['POST'])
+def add_course():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    success = db.add_course(request.form['coursename'])
+    if success:
+        flash('添加成功', 'success')
+    else:
+        flash('添加失败', 'error')
+    return redirect(url_for('get_course'))
+
+
+@app.route('/course/delete/<course_id>', methods=['GET'])
+def del_course(course_id):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    if db.get_role(session['logged_in_user']) != 'admin':
+        abort(403)
+    success = db.del_course(course_id)
+    if success:
+        flash('删除成功', 'success')
+    else:
+        flash('删除失败', 'error')
+    return redirect(url_for('get_course'))
+
+
+@app.route('/score/<id>', methods=['GET'])
+def get_score(id):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    request_type = request.args['type']
+    if request_type == 'student':
+        return render_template(
+            'score_student.html',
+            stu_id=id,
+            scores=db.get_score_by_stu_id(id),
+            unselected_course=db.get_unselected_course(id)
+            )
+    elif request_type == 'course':
+        return render_template(
+            'score_course.html',
+            c_id=id,
+            scores=db.get_score_by_course_id(id),
+            unselected_students=db.get_unselected_student(id)
+        )
+    else:
+        abort(400)
+
+
+@app.route('/score/add', methods=['POST'])
+def add_score():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    success = db.add_score(request.form['stu_id'], request.form['course_id'],
+                           request.form['score'])
+    if success:
+        flash('添加成功', 'success')
+    else:
+        flash('添加失败', 'error')
+    return redirect(url_for('get_score', id=request.form['course_id'],
+                            type=request.form['type']))
+
+
+@app.route('/score/modify', methods=['POST'])
+def modify_score():
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    success = db.modify_score(request.form['stu_id'], request.form['c_id'],
+                              request.form['score'])
+    if success:
+        flash('修改成功', 'success')
+    else:
+        flash('修改失败', 'error')
+    redirect_type = request.form['type']
+    print(redirect_type)
+    if redirect_type == 'course':
+        redirect_id = request.form['c_id']
+    elif redirect_type == 'student':
+        redirect_id = request.form['stu_id']
+    return redirect(url_for('get_score', id=redirect_id,
+                            type=redirect_type))
+
+
+@app.route('/score/del/<course_id>', methods=['GET'])
+def del_score_in_course(course_id):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    success = db.del_score(request.args['stu_id'], course_id)
+    if success:
+        flash('删除成功', 'success')
+    else:
+        flash('删除失败', 'error')
+    return redirect(url_for('get_score', id=course_id,
+                            type='course'))
+
+
+@app.route('/score/del/<stu_id>', methods=['GET'])
+def del_score_in_student(stu_id):
+    if not session.get('logged_in_user'):
+        return redirect(url_for('login'))
+    success = db.del_score(stu_id, request.args['course_id'])
+    if success:
+        flash('删除成功', 'success')
+    else:
+        flash('删除失败', 'error')
+    return redirect(url_for('get_score', id=course_id,
+                            type='student'))

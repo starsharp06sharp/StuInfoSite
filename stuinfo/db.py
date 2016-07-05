@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pymysql
+from pymysql.err import MySQLError
 import hashlib
 from flask import g
 from stuinfo import app
@@ -105,37 +106,49 @@ def get_stu_info(db, cursor):
 
 @dbfunc
 def add_stu_info(db, cursor, id, name, gender, phonenum=None, emailaddr=None):
-    cursor.execute('insert into Students values (%s, %s, %s, %s, %s)',
-                   [id, name, gender, phonenum, emailaddr])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('insert into Students values (%s, %s, %s, %s, %s)',
+                    [id, name, gender, phonenum, emailaddr])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
 def del_stu_info(db, cursor, id):
-    cursor.execute('delete from Students where id = %s', [id])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('delete from Students where id = %s', [id])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
 def modify_stu_info(db, cursor, id, phonenum, emailaddr):
-    cursor.execute('update Students set phonenum = %s , emailaddr = %s where id = %s',
-                   [phonenum, emailaddr, id])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('update Students set phonenum = %s , emailaddr = %s where id = %s',
+                    [phonenum, emailaddr, id])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
 def modify_user_password(db, cursor, username, old_password, new_password):
-    cursor.execute('update Users set password = %s where username = %s and password = %s',
-                   [new_password, username, old_password])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('update Users set password = %s where username = %s and password = %s',
+                    [new_password, username, old_password])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
@@ -155,30 +168,39 @@ def get_user_info(db, cursor):
 
 @dbfunc
 def create_user(db, cursor, username, password, role):
-    cursor.execute('insert into Users values (%s, %s, %s)',
-                   [username, password, role])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('insert into Users values (%s, %s, %s)',
+                    [username, password, role])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
 def del_user(db, cursor, username):
-    cursor.execute('delete from Users where username = %s', [username])
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        cursor.execute('delete from Users where username = %s', [username])
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False
 
 
 @dbfunc
 def modify_user(db, cursor, username, password, role):
-    if username == '':
-        query = 'update Users set role = %s where username = %s'
-        params = [role, username]
-    else:
-        query = 'update Users set role = %s , password = %s where username = %s'
-        params = [role, password, username]
-    cursor.execute(query, params)
-    db.commit()
-    # 返回是否成功
-    return cursor.rowcount == 1
+    try:
+        if username == '':
+            query = 'update Users set role = %s where username = %s'
+            params = [role, username]
+        else:
+            query = 'update Users set role = %s , password = %s where username = %s'
+            params = [role, password, username]
+        cursor.execute(query, params)
+        db.commit()
+        # 返回是否成功
+        return cursor.rowcount == 1
+    except MySQLError:
+        return False

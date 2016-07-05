@@ -13,3 +13,19 @@ create table if not exists Students (
     emailaddr varchar(255),
     check(gender in ('男', '女'))
 );
+
+create table if not exists Courses (
+    id integer primary key auto_increment,
+    name varchar(255) not null
+);
+
+create table if not exists Score (
+    stu_id varchar(32) references  Students(id)
+        on delete cascade
+        on update cascade,
+    c_id integer references Courses(id)
+        on delete cascade
+        on update cascade,
+    score integer,
+    primary key (stu_id, c_id)
+);

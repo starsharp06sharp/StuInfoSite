@@ -229,8 +229,13 @@ def add_score():
         flash('添加成功', 'success')
     else:
         flash('添加失败', 'error')
-    return redirect(url_for('get_score', id=request.form['course_id'],
-                            type=request.form['type']))
+    redirect_type = request.form['type']
+    if redirect_type == 'course':
+        redirect_id = request.form['course_id']
+    elif redirect_type == 'student':
+        redirect_id = request.form['stu_id']
+    return redirect(url_for('get_score', id=redirect_id,
+                            type=redirect_type))
 
 
 @app.route('/score/modify', methods=['POST'])
@@ -244,7 +249,6 @@ def modify_score():
     else:
         flash('修改失败', 'error')
     redirect_type = request.form['type']
-    print(redirect_type)
     if redirect_type == 'course':
         redirect_id = request.form['c_id']
     elif redirect_type == 'student':

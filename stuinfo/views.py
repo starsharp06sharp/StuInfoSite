@@ -48,13 +48,18 @@ def add_student():
         return redirect(url_for('login'))
     if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
-    success = db.add_stu_info(request.form['id'], request.form['name'],
-                              request.form['gender'], request.form['phonenum'],
-                              request.form['emailaddr'])
-    if success:
-        flash('添加成功', 'success')
+    if (not request.form['id']) or \
+       (not request.form['name']) or \
+       (not request.form.get('gender')):
+            flash('请将参数填完整', 'error')
     else:
-        flash('添加失败', 'error')
+        success = db.add_stu_info(request.form['id'], request.form['name'],
+                                  request.form['gender'], request.form['phonenum'],
+                                  request.form['emailaddr'])
+        if success:
+            flash('添加成功', 'success')
+        else:
+            flash('添加失败', 'error')
     return redirect(url_for('index'))
 
 
@@ -115,12 +120,15 @@ def add_user():
         return redirect(url_for('login'))
     if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
-    success = db.create_user(request.form['username'], request.form['password'],
-                             request.form['role'])
-    if success:
-        flash('创建成功', 'success')
+    if (not request.form['username']) or (not request.form['password']):
+        flash('用户名与密码不能为空', 'error')
     else:
-        flash('创建失败', 'error')
+        success = db.create_user(request.form['username'], request.form['password'],
+                                request.form['role'])
+        if success:
+            flash('创建成功', 'success')
+        else:
+            flash('创建失败', 'error')
     return redirect(url_for('user_admin_page'))
 
 
@@ -174,11 +182,14 @@ def add_course():
         return redirect(url_for('login'))
     if db.get_role(session['logged_in_user']) != 'admin':
         abort(403)
-    success = db.add_course(request.form['coursename'])
-    if success:
-        flash('添加成功', 'success')
+    if not request.form['coursename']:
+        flash('课程名不能为空', 'error')
     else:
-        flash('添加失败', 'error')
+        success = db.add_course(request.form['coursename'])
+        if success:
+            flash('添加成功', 'success')
+        else:
+            flash('添加失败', 'error')
     return redirect(url_for('get_course'))
 
 
@@ -223,12 +234,15 @@ def get_score(id):
 def add_score():
     if not session.get('logged_in_user'):
         return redirect(url_for('login'))
-    success = db.add_score(request.form['stu_id'], request.form['course_id'],
-                           request.form['score'])
-    if success:
-        flash('添加成功', 'success')
+    if not request.form['score'].isdigit():
+        flash('分数应为整数', 'error')
     else:
-        flash('添加失败', 'error')
+        success = db.add_score(request.form['stu_id'], request.form['course_id'],
+                               request.form['score'])
+        if success:
+            flash('添加成功', 'success')
+        else:
+            flash('添加失败', 'error')
     redirect_type = request.form['type']
     if redirect_type == 'course':
         redirect_id = request.form['course_id']
@@ -242,12 +256,15 @@ def add_score():
 def modify_score():
     if not session.get('logged_in_user'):
         return redirect(url_for('login'))
-    success = db.modify_score(request.form['stu_id'], request.form['c_id'],
-                              request.form['score'])
-    if success:
-        flash('修改成功', 'success')
+    if not request.form['score'].isdigit():
+        flash('分数应为整数', 'error')
     else:
-        flash('修改失败', 'error')
+        success = db.modify_score(request.form['stu_id'], request.form['c_id'],
+                                  request.form['score'])
+        if success:
+            flash('修改成功', 'success')
+        else:
+            flash('修改失败', 'error')
     redirect_type = request.form['type']
     if redirect_type == 'course':
         redirect_id = request.form['c_id']
